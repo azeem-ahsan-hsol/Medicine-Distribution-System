@@ -9,14 +9,22 @@ module.exports = {
       strength: { type: Sequelize.STRING },
       form: { type: Sequelize.STRING },
       packing: { type: Sequelize.STRING },
-      barcode: { type: DataTypes.STRING, unique: true, allowNull: false  },
+      barcode: { type: Sequelize.STRING, unique: true, allowNull: false },
       mrp: { type: Sequelize.DECIMAL(10, 2) },
       purchase_price: { type: Sequelize.DECIMAL(10, 2) },
       selling_price: { type: Sequelize.DECIMAL(10, 2) },
       is_prescription_required: { type: Sequelize.BOOLEAN, defaultValue: false },
       is_controlled: { type: Sequelize.BOOLEAN, defaultValue: false },
-      createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal("CURRENT_TIMESTAMP") },
-      updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP") }
+      createdAt: { 
+        type: Sequelize.DATE, 
+        allowNull: false, 
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP") 
+      },
+      updatedAt: { 
+        type: Sequelize.DATE, 
+        allowNull: false, 
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP") 
+      }
     });
   },
 
