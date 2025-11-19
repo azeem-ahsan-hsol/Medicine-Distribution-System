@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
 
@@ -22,6 +23,18 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 
 const app = express();
+
+// ----------------- CORS SETUP -----------------
+app.use(
+  cors({
+    origin: "http://localhost:5173",  // Your frontend
+    credentials: true,                // Allow cookies, auth headers
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
+
+// Needed when using credentials
 app.use(express.json());
 
 // ------- API ROUTES -------- //
