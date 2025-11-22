@@ -27,14 +27,12 @@ const app = express();
 // ----------------- CORS SETUP -----------------
 app.use(
   cors({
-    origin: "http://localhost:5173",  // Your frontend
-    credentials: true,                // Allow cookies, auth headers
+    origin: "*",          // Allow all origins
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// Needed when using credentials
 app.use(express.json());
 
 // ------- API ROUTES -------- //
