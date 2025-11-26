@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 export default {
   development: {
     username: process.env.DB_USER || "root",
@@ -18,3 +21,5 @@ export default {
     logging: false
   }
 };
+
+console.log(process.env.DB_DIALECT)
