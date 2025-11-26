@@ -1,5 +1,17 @@
 import dotenv from "dotenv";
-dotenv.config();
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Resolve __dirname in ESModules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env from backend root (two levels up from config.js)
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+
+// Debug logs (remove once working)
+console.log("ENV → DB_USER:", process.env.DB_USER);
+console.log("ENV → DB_DIALECT:", process.env.DB_DIALECT);
 
 export default {
   development: {
@@ -9,17 +21,15 @@ export default {
     host: process.env.DB_HOST || "127.0.0.1",
     port: process.env.DB_PORT || 3306,
     dialect: process.env.DB_DIALECT || "mysql",
-    logging: false
+    logging: false,
   },
   production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALECT,
-    logging: false
-  }
+    username: process.env.DB_USER || "pharma_user",
+    password: process.env.DB_PASS || "YourStrongPassword",
+    database: process.env.DB_NAME || "pharma_db",
+    host: process.env.DB_HOST || "127.0.0.1",
+    port: process.env.DB_PORT || 3306,
+    dialect: process.env.DB_DIALECT || "mysql",
+    logging: false,
+  },
 };
-
-console.log(process.env.DB_DIALECT)
