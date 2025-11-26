@@ -1,11 +1,55 @@
 import { BaseService } from "./base.service.js";
 import { Product } from "../models/product.model.js";
+import { Op } from "sequelize";
 
 export class ProductService extends BaseService {
-  async getAll() {
-    const products = await Product.findAll();
-    return this.success("Products fetched", products);
+
+  async getAll(page = 1, limit = 10) {
+    page = Number(page);
+    limit = Number(limit);
+
+    const offset = (page - 1) * limit;
+
+    const { rows: products, count: total } = await Product.findAndCountAll({
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
+    });
+
+    return this.success("Products fetched", {
+      products,
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    });
   }
+
+  async search(term) {
+    // if no term, just return empty array (or you could call getAll)
+    if (!term || !term.trim()) {
+      return this.success("Products search (empty term)", []);
+    }
+
+    const q = term.trim();
+
+    const products = await Product.findAll({
+      where: {
+        [Op.or]: [
+          // product_name LIKE %q%
+          { product_name: { [Op.like]: `%${q}%` } },
+          // generic_name LIKE %q%
+          { generic_name: { [Op.like]: `%${q}%` } },
+          // barcode exact or partial match
+          { barcode: { [Op.like]: `%${q}%` } }
+        ]
+      },
+      order: [["createdAt", "DESC"]]
+    });
+
+    return this.success("Products search result", products);
+  }
+
 
   async create(data) {
     return this.runTransaction(async (t) => {
@@ -48,4 +92,6 @@ export class ProductService extends BaseService {
       this.error(err.message || "Failed to fetch product", 500);
     }
   }
+
+  
 }

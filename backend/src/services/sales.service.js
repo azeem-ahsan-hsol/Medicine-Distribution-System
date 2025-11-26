@@ -6,6 +6,9 @@ import {
   Product,
   Customer
 } from "../models/index.js";
+import { Op, Sequelize } from "sequelize";
+import moment from "moment";
+
 
 export class SalesService extends BaseService {
   /**

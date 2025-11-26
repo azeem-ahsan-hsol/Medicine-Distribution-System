@@ -120,9 +120,16 @@ export class PurchaseService extends BaseService {
     });
   }
 
-  async getAll() {
+  async getAll(page = 1, limit = 10) {
     try {
-      const purchases = await Purchase.findAll({
+      page = Number(page);
+      limit = Number(limit);
+
+      const offset = (page - 1) * limit;
+
+      const { rows: purchases, count: total } = await Purchase.findAndCountAll({
+        limit,
+        offset,
         include: [
           { model: Supplier, as: "supplier", required: false },
           {
@@ -132,14 +139,25 @@ export class PurchaseService extends BaseService {
             include: [{ model: Product, as: "product", required: false }]
           }
         ],
-        order: [["invoice_date", "DESC"], ["createdAt", "DESC"]]
+        order: [
+          ["invoice_date", "DESC"],
+          ["createdAt", "DESC"]
+        ]
       });
 
-      return this.success("Purchases fetched", purchases);
+      return this.success("Purchases fetched", {
+        purchases,
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      });
+
     } catch (err) {
       this.error(err.message || "Failed to fetch purchases", 500);
     }
   }
+
 
   async getById(id) {
     try {

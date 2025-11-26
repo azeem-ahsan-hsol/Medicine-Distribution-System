@@ -16,13 +16,14 @@ export class PurchaseController {
   }
 
   async getAll(req, res, next) {
-    try {
-      const result = await this.svc.getAll();
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
+  try {
+    const { page = 1, limit = 10 } = req.query; // pagination input
+    const result = await this.svc.getAll(page, limit);
+    res.json(result);
+  } catch (err) {
+    next(err);
   }
+}
 
   async getById(req, res, next) {
     try {

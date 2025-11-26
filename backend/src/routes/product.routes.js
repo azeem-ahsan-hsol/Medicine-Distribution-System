@@ -5,6 +5,8 @@ import { attachUser, adminOnly } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 const productController = new ProductController();
 
+//search products - any logged-in user
+router.get("/search", attachUser, (req, res, next) => productController.search(req, res, next));
 // Any logged-in user can get all products
 router.get("/", attachUser, (req, res, next) => productController.getAll(req, res, next));
 
@@ -19,5 +21,7 @@ router.delete("/:id", attachUser, adminOnly, (req, res, next) => productControll
 
 // get product by id - any logged-in user
 router.get("/:id", attachUser, (req, res, next) => productController.getById(req, res, next));
+
+
 
 export default router;

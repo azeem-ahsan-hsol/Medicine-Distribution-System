@@ -14,6 +14,16 @@ export class CustomerController {
     }
   }
 
+  async search(req, res, next) {
+    try {
+      const { q } = req.query;
+      const result = await this.svc.search(q);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async getById(req, res, next) {
     try {
       const result = await this.svc.getById(req.params.id);

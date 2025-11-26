@@ -5,6 +5,9 @@ import { attachUser, adminOnly } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 const controller = new CustomerController();
 
+// 🔍 Search customers
+router.get("/search", attachUser, (req, res, next) => controller.search(req, res, next));
+
 // Any authenticated user can get all customers
 router.get("/", attachUser, (req, res, next) => controller.getAll(req, res, next));
 

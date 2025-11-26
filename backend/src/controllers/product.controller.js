@@ -7,11 +7,25 @@ export class ProductController {
 
   async getAll(req, res, next) {
     try {
-      res.json(await this.productService.getAll());
+      const { page = 1, limit = 10 } = req.query; // <-- read from query
+      const response = await this.productService.getAll(page, limit);
+      res.json(response);
     } catch (err) {
       next(err);
     }
   }
+
+  // 🔍 NEW: search API
+  async search(req, res, next) {
+    try {
+      const { q } = req.query; // ?q=paracetamol / ?q=5000123123 etc.
+      const response = await this.productService.search(q);
+      res.json(response);
+    } catch (err) {
+      next(err);
+    }
+  }
+
 
   async create(req, res, next) {
     try {
@@ -44,4 +58,5 @@ export class ProductController {
       next(err);
     }
   }
+  
 }

@@ -1,5 +1,6 @@
 import { BaseService } from "./base.service.js";
 import { Customer } from "../models/customer.model.js";
+import { Op } from "sequelize";
 
 export class CustomerService extends BaseService {
   async getAll() {
@@ -8,6 +9,25 @@ export class CustomerService extends BaseService {
       return this.success("Customers fetched", customers);
     } catch (err) {
       this.error(err.message || "Failed to fetch customers", 500);
+    }
+  }
+
+  async search(q) {
+    try {
+      if (!q) this.error("Search query is required", 400);
+
+      const customers = await Customer.findAll({
+        where: {
+          [Op.or]: [
+            { name: { [Op.like]: `%${q}%` } },
+            { license_no: { [Op.like]: `%${q}%` } }
+          ]
+        }
+      });
+
+      return this.success("Search results", customers);
+    } catch (err) {
+      this.error(err.message || "Failed to search customers", 500);
     }
   }
 
